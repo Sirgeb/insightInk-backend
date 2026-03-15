@@ -76,7 +76,7 @@ export const signin = async (req: Request, res: Response) => {
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      imageUrl: user.imageUrl,
+      picture: user.picture,
       token: sessionToken,
     },
     message: "User logged in successfully",
@@ -92,7 +92,7 @@ export const me = async (req: AuthenticatedRequest, res: Response) => {
       firstName: req.user.firstname,
       lastName: req.user.lastname,
       email: req.user.email,
-      picture: req.user.imageUrl,
+      picture: req.user.picture,
       token: sessionToken,
     },
   });

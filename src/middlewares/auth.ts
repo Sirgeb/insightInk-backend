@@ -28,7 +28,7 @@ const authMiddleware = async (req: any, res: Response, next: NextFunction) => {
         firstname: true,
         lastname: true,
         email: true,
-        imageUrl: true,
+        picture: true,
       },
     });
 
