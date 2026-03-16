@@ -11,7 +11,6 @@ const app: Express = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
@@ -23,7 +22,7 @@ app.use(cookieParser(COOKIE_SECRET));
 app.use("/api/v1", rootRouter);
 
 app.get("/", (req, res) => {
-  res.status(200).send();
+  res.status(200).send("Server is running!");
 });
 
 export const prismaClient = new PrismaClient({
@@ -32,6 +31,10 @@ export const prismaClient = new PrismaClient({
 
 app.use(errorMiddleware);
 
-app.listen(PORT, () => {
-  console.log(`server running on http://localhost:${PORT}`);
-});
+if (process.env.VERCEL === undefined) {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
