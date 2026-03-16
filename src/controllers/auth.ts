@@ -89,8 +89,8 @@ export const me = async (req: AuthenticatedRequest, res: Response) => {
     ok: true,
     user: {
       id: req.user.id,
-      firstName: req.user.firstname,
-      lastName: req.user.lastname,
+      firstname: req.user.firstname,
+      lastname: req.user.lastname,
       email: req.user.email,
       picture: req.user.picture,
       token: sessionToken,
