@@ -3,29 +3,38 @@ import { prismaClient } from "../index";
 import { AuthenticatedRequest } from "../types/express";
 
 export const createTodo = async (req: AuthenticatedRequest, res: Response) => {
-  const { task, duration, priority, tags } = req.body;
-
+  const todos = req.body;
   const userId = req.user.id;
 
-  if (!task || !duration || !priority) {
+  if (!Array.isArray(todos) || todos.length === 0) {
     return res.status(400).json({
-      message: "task, duration and priority are required",
+      message: "Request body must be an array of todos",
     });
   }
 
-  const todo = await prismaClient.todo.create({
-    data: {
-      task,
-      duration,
-      priority,
-      tags: tags || [],
-      userId,
-    },
+  for (const todo of todos) {
+    if (!todo.task || !todo.duration || !todo.priority) {
+      return res.status(400).json({
+        message: "Each todo must contain task, duration and priority",
+      });
+    }
+  }
+
+  const formattedTodos = todos.map((todo) => ({
+    task: todo.task,
+    duration: todo.duration,
+    priority: todo.priority,
+    tags: todo.tags || [],
+    userId,
+  }));
+
+  const result = await prismaClient.todo.createMany({
+    data: formattedTodos,
   });
 
   res.status(201).json({
-    message: "Todo created successfully",
-    todo,
+    message: "Todos created successfully",
+    count: result.count,
   });
 };
 
